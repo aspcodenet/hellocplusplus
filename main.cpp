@@ -9,6 +9,10 @@
 // NYTT:
 // loopar for each
 
+//Övningar: 
+// allmänt input/output   ExercisesVecka1.docx
+// + funktioner ExercisesWeek3 (1).docx
+
 int main(){
 
     return 0;
