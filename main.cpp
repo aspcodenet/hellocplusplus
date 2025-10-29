@@ -61,7 +61,7 @@ int main(){
             players.push_back(player);
         }else if(selection == 2){
             std::cout << "ALLA SPELARE:" << std::endl;
-            for(const auto& p : players){
+            for(Player p : players){
                 std::cout << "Namn: " << p.name << ", Age: " << p.age << std::endl;
             }
         }
