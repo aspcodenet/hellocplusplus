@@ -1,11 +1,16 @@
 #include <iostream>
-#include <string>
-#include <vector>
-//#include <stdio.h>
+#include <string> // std::string
+// namespace = folder
+// #include <vector>
+// #include <stdio.h> // scanf, printf
+// #include <string.h> // strcpy, strcat
+
+// VARFÖR HAR VI LÄRT OSS DUMMA "C" då?
+// PÅ IOT devices/embedded systems C vanligare än C++
 
 //Vad är jobbigt i C
 // input/output - hej streams och stream insertion operator
-//    printf %s %d etc etc      
+//    printf %s %d, scanf (buffer overflow) etc etc      
 // strings - japp hej std::string
 // pekare - hej referenser
 // allokeringar - hej vector
@@ -16,120 +21,66 @@
 //Övningar: 
 // allmänt input/output   ExercisesVecka1.docx
 // + funktioner ExercisesWeek3 (1).docx
+//using namespace std;
 
-// STREAM är en 
+// DEFINITION - funktion
+// Metod = funktion som är del av en klass
 
-
-// void test(int *i){
-//     *i = *i + 1;
-//     std::cout << *i << std::endl;
-// }
-// void test(int *i)
-
-
-void test(int &i){
-    i = i + 1;
-    std::cout << i << std::endl;
-}
-
-class Player{
-public:
-    std::string name;
-    int age;
-};
-
-// a) 12 13 12
-// b) 12 13 13 
 int main(){
-    //Player *p = new Player();
-    std::vector<Player> playersList;
+    // int  age ;
+    // age = 12;
+    // int age2 = 12;
 
-    while(1){
-        Player  foppa;
-        std::cout << "ange age";
-        std::cin >> foppa.age;
-        std::cout << "ange namn";
-        getline(std::cin, foppa.name);
-        playersList.push_back(foppa);
-
-        //playersList.
-        //foppa.name.
-
-        for(Player p : playersList){
-            std::cout << p.name << std::endl;
-        }
-    }
-
-    int i;
-    i=12;
-
-    std::cout << i << std::endl;
-    test(i);
-    //test(&i);
-    std::cout << i << std::endl;
-
-
-    int a; // no initializer
-    a = 5;
-    int b = 5; // initializer after equals sign
-    int c( 5 ); // initializer in parenthesis
-    int d { 5 }; // initializer in braces    
-
-
-    // std::string str1;
-    // str1 = "Hello";
-    // std::string str2 = "Hello";  
-    // std::string str3("Hello");
-
-
-
-    // std::string s1 = std::to_string(3.1415);
-    // int x1 = std::stoi("-17");
-    // double d = std::stod("4.3");
-
-
-
-    std::string namn;
-    std::cout << "Whats your name:";
-    getline(std::cin,namn);   // läser en hel rad
-    if(namn.length() < 10 ){
-        std::cout << "Vilket kort namn du har" << std::endl;
-    }
-    if(namn.at(0) == 'S'){
-        std::cout << "Du börjar på S" << std::endl;
-    }
-    if(namn[0] == 'S'){
-        std::cout << "Du börjar på S" << std::endl;
-    }
-    int antalS = 0;
-    for(int i = 0; i < namn.length();i++){
-        if(namn[i] == 'S'){
-            antalS++;
-        }
-    }
-    antalS = 0;
-    for(char ch : namn){
-        if(ch == 'S'){
-            antalS++;
-        }
-
+    int year = 20;
+    int price;
+    if (year > 18) {
+        price = 30;
+    }else{
+        price = 20;
     }
 
 
-    //std::cin >> namn; // denna bryter vid mellanslag Leif Stefan -> Leif
+    // SYNTAKTISKT SOCKER ANVÄNDS MEST OM DET ÄR IF OCH ELSE (aldrig med else if osv)
+    price = year > 18 ? 30 : 20;
 
-    if(namn == "Stefan"){
-        std::cout << "Fint namn";
+
+
+
+    std::string playerName = "Foppa";
+    if(playerName == "Foppa"){
+        std::cout << "Legend!" << std::endl;
     }
-    namn = namn + " Holmberg";
 
-    int age ;
-    std::cout << "How old are you:";
+    
+    // if(playerName.length() < 10 ){
+    //     std::cout << "Vilket kort namn du har" << std::endl;
+    // }
+
+
+    // playerName = playerName + " Holmberg";
+
+    std::string name; // BEST PRACTICE
+    std::cout << "Whats your name:"; // scanf " %s"   fgets  Stefan Hoklnmberg
+    std::getline(std::cin, name); // läser en hel rad
+    // std::cin >> name; // Ingen risk för buffer overflow
+    //                    // Bryts vid mellanslag
+
+    // Finns nåt som heter COUT = console output 
+    // vi kan skicka dit med den s.k STREAM OPERATOR << 
+    int age = 30;
     std::cin >> age;
+    //printf("Hello World! %d\n", age);
+    std::cout << "Hello World! " << age << std::endl;
 
-    std::cout << "Hej " << namn << " du är " << age << " år" << std::endl;
+    // std::string namn;
+    // namn = "Stefan";
+    // namn = namn + " Holmberg";
+
+    // std::cout << "Hej " << namn << std::endl;
+
     // char namn[256];
     // strcpy(namn, "Stefan");
+    // strcat(namn, " Holmberg");
     // printf("Hej %s\n", namn);
-    return 0;
+    // return 0;
 }
