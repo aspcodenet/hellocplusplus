@@ -1,154 +1,230 @@
 #include <iostream>
 #include <string>
-#include <vector>
- // std::string
-// namespace = folder
-// #include <vector>
-// #include <stdio.h> // scanf, printf
-// #include <string.h> // strcpy, strcat
+#include <vector> // en array  som kan växa
 
-// VARFÖR HAR VI LÄRT OSS DUMMA "C" då?
-// PÅ IOT devices/embedded systems C vanligare än C++
-
-//Vad är jobbigt i C
-// input/output - hej streams och stream insertion operator
-//    printf %s %d, scanf (buffer overflow) etc etc      
-// strings - japp hej std::string
-// pekare - hej referenser
-// allokeringar - hej vector
-// NYTT:
-// loopar for each
-// auto
-
-//Övningar: 
-// allmänt input/output   ExercisesVecka1.docx
-// + funktioner ExercisesWeek3 (1).docx
-//using namespace std;
-
-// DEFINITION - funktion
-// Metod = funktion som är del av en klass
+// FUNKTION
+// tar in en eller flera parametrar och returnerar ett värde
+//                                      returnerar ett eller flera värden    
+// NÄR ???  returnera själva beräkningen PLUS en felkod
 
 
-class Player{
-public:
+
+// default parameters
+void PlayerPrint(std::string fname, std::string lname, std::string country = "Sweden") 
+{  
+	std::cout << fname << lname << country <<  "\n";
+}
+
+
+int getPlayerJersey(std::string name) 
+{  
+    if(name == "Stefan")
+        return 10;
+    else if(name == "Anna")
+        return 7;
+    return -1;
+}
+
+typedef struct {
+    std::string name;
+    int errorCode;
+} PlayerError;
+
+PlayerError getPlayerName(int jersey) 
+{  
+    PlayerError err;
+    if(jersey == 10)
+    {
+        err.name = "Stefan";
+        err.errorCode = 0;
+        return err;    
+    }
+    else if(jersey == 7)
+    {
+        err.name = "Anna";
+        err.errorCode = 0;
+        return err;
+    }
+    err.name = "Unknown";
+    err.errorCode = -1;
+    return err;
+}
+
+std::tuple<double, char, std::string> get_student(int id)
+{
+    if (id == 0) return std::make_tuple(3.8, 'A', "Lisa Simpson");
+    if (id == 1) return std::make_tuple(2.9, 'C', "Milhouse Van Houten");
+    if (id == 2) return std::make_tuple(1.7, 'D', "Ralph Wiggum");
+    throw std::invalid_argument("id");
+}
+
+int add(int a, int b){
+    return a + b;
+}
+
+int add(int a, int b, int c){
+    return a + b + c;
+}
+
+
+double add(double a, double b){
+    return a + b;
+}
+
+
+typedef struct {
     std::string name;
     int age;
-};
+} Player;
+
+void bla(Player *p){ // copy by value (tar mycket minne om Player är stor - kan inte ändra originalet)
+    // p.age = p.age + 1; // ändrar bara kopian
+    // std::cout << p.age << std::endl;
+    p->age = p->age + 1; // ändrar originalet
+    std::cout << p->age << std::endl;
+}
+
+void bla2(int *p){
+    *p = 12;
+}
+
+
+
+// C++ references /(syntaktiskt socker ) 
+void blamedreference(Player &p){  // reference to p
+    p.age = p.age + 1; // ändrar originalet    
+    std::cout << p.age << std::endl;
+    // vi slipper pil
+}
+
+void blamedreference2(const Player &p){  // reference to p
+    std::cout << p.age << std::endl;
+    // vi slipper pil
+}
+
+
+
+
+void titleCase(char *texten){ // txt = 1010
+    bool beforeWasSpace = false;
+
+    for(int i = 0; i < strlen(texten); i++){
+        if(i == 0 || beforeWasSpace)
+            texten[i] = toupper(texten[i]);
+        if(texten[i] == ' ')
+            beforeWasSpace = true;
+        else
+            beforeWasSpace = false;
+    }
+}
+
 
 
 int main(){
-    // Player  foppa;
-    // foppa.name = "Foppa"; // INGEN J-KLA STRCPY I C++
-    // foppa.age = 42;
 
-    std::vector<Player> players; // en vector är en abstraktion över dynamiska arrayer
-    //players.push_back(... ); // lägger till en ny tom Player i listan
+    // a variabeln ligger på stacken
+    const int a = 0; // Kopiera 4 bytes från text-seg till stacken
+    int *a_ptr = (int*)&a; 
+    *a_ptr = 1234;
 
-    int selection;
-    while(true){
-        std::cout << "1. Skapa" << std::endl;
-        std::cout << "2. Lista" << std::endl;
-        std::cout << "3. Avsluta" << std::endl;
-        std::cout << "Ditt val:";
-        std::cin >> selection;
-        if(selection == 1){
-            std::cout << "NY SPELARE:" << std::endl;
-            Player player;
-            std::cout << "Ange namn:";
-            std::cin >> player.name;
-            std::cout << "Ange age:";
-            std::cin >> player.age;
-            players.push_back(player);
-        }else if(selection == 2){
-            std::cout << "ALLA SPELARE:" << std::endl;
-            for(Player p : players){
-                std::cout << "Namn: " << p.name << ", Age: " << p.age << std::endl;
-            }
+    std::cout << a << std::endl; 
+
+    char text[20];
+    strcpy(text,"hejsan hoppsan");
+    titleCase(text);
+    // Hejsan Hoppsan
+    const int i = 12; // KONSTANT - FÖR ATT FÖRBÄTTRA KODKVALITETEN
+    //   REFERENCE är ju en pekare  under huven
+    // innebär att man kan ändra i värdet
+    Player p11;
+    p11.name = "Stefan";
+    p11.age = 35;
+    blamedreference2(p11); //vi skrivert inte address of
+    // RISK ATT P11 är ändrad efter anropet
+
+
+    //
+
+
+        // carsPython =["Volvo", "BMW", "Ford", "Mazda"]
+        std::vector<std::string> cars = {"Volvo", "BMW", "Ford", "Mazda"};
+        // Change the value of the first element
+        cars[0] = "Opel";
+        std::cout << cars[0]; 
+
+        for (std::string car : cars) {
+            std::cout << car << "\n";
         }
-        else if(selection == 3){
-            break;
-        }
+
+
+        std::vector<std::string> cars = {"Volvo", "BMW", "Ford", "Mazda"};
+        // carsPython.append("Tesla")
+        cars.push_back("Tesla"); // i push_back görs realloc!
+        cars.push_back("VW");
+        cars.push_back("Mitsubishi");
+        cars.push_back("Mini");
+
+        std::vector<std::string> cars = {"Volvo", "BMW", "Ford", "Mazda"};
+        cars.pop_back();  // TA BORT = längst bak
+
+        std::vector<std::string> cars = {"Volvo", "BMW", "Ford", "Mazda"};
+        std::cout << cars.size();  // Outputs 4
+
+
+
+
+    Player p1;
+    p1.name = "Stefan";
+    p1.age = 35;
+    blamedreference(p1); //vi skrivert inte address of
+
+
+
+
+
+
+
+
+    bla(&p1);
+    std::cout << p1.age << std::endl; // p1.age is still 35
+
+    auto sum = add(5, 7);
+    double sum = add(5.1, 7.1);
+
+
+    // auto = 
+    auto i = 12;               // i blir en int
+    auto j = 13.2;             // j blir en double
+
+    auto student0 = get_student(0);
+    std::cout << "ID: 0, "
+              << "GPA: " << std::get<0>(student0) << ", "
+              << "grade: " << std::get<1>(student0) << ", "
+              << "name: " << std::get<2>(student0) << '\n';
+ 
+
+              // Javascript destructuring assignment
+    // C++17 structured binding:
+    // gpa2 =  std::get<0>(student0);
+    // grade2 =  std::get<1>(student0)
+    //  name2 = std::get<2>(student0)
+    auto [ gpa2, grade2, name2 ] = get_student(2);
+    std::cout << "ID: 2, "
+              << "GPA: " << gpa2 << ", "
+              << "grade: " << grade2 << ", "
+              << "name: " << name2 << '\n';
+
+
+
+   //std::string playerName = getPlayerName(10);
+
+    int jersey = getPlayerJersey("Stefan");
+    if(jersey == -1){
+        std::cout << "Player not found!" << std::endl;
     }
 
-    // foreach 
-    // int arr[]{ 21,9,56,99, 202 }; // arrayer som vanligt - dom är statiska i C++
-    // // C = indexbaserade loopar
-    // for(int index = 0; index < 5; index++){
-    //     std::cout << arr[index] << std::endl;
-    // }
-
-    // for(int value : arr){ // for each loop
-    //     std::cout << value << std::endl;
-    // }
-
-    // int i = 12;
-    // auto j = 13.2;
-    // // j blir en float
-
-    // float a = 1.1f;
-    // auto b = 2.2;
-    // // b blir en float
-
-    // // auto
-    // for(auto value : arr){
-    //     std::cout << value << std::endl;
-    // }
-
-
-    // // int  age ;
-    // // age = 12;
-    // // int age2 = 12;
-
-    // int year = 20;
-    // int price;
-    // if (year > 18) {
-    //     price = 30;
-    // }else{
-    //     price = 20;
-    // }
-
-
-    // // SYNTAKTISKT SOCKER ANVÄNDS MEST OM DET ÄR IF OCH ELSE (aldrig med else if osv)
-    // price = year > 18 ? 30 : 20;
-
-
-
-
-    // std::string playerName = "Foppa";
-    // if(playerName == "Foppa"){
-    //     std::cout << "Legend!" << std::endl;
-    // }
-
-    
-    // // if(playerName.length() < 10 ){
-    // //     std::cout << "Vilket kort namn du har" << std::endl;
-    // // }
-
-
-    // // playerName = playerName + " Holmberg";
-
-    // std::string name; // BEST PRACTICE
-    // std::cout << "Whats your name:"; // scanf " %s"   fgets  Stefan Hoklnmberg
-    // std::getline(std::cin, name); // läser en hel rad
-    // // std::cin >> name; // Ingen risk för buffer overflow
-    // //                    // Bryts vid mellanslag
-
-    // // Finns nåt som heter COUT = console output 
-    // // vi kan skicka dit med den s.k STREAM OPERATOR << 
-    // int age = 30;
-    // std::cin >> age;
-    // //printf("Hello World! %d\n", age);
-    // std::cout << "Hello World! " << age << std::endl;
-
-    // // std::string namn;
-    // // namn = "Stefan";
-    // // namn = namn + " Holmberg";
-
-    // // std::cout << "Hej " << namn << std::endl;
-
-    // // char namn[256];
-    // // strcpy(namn, "Stefan");
-    // // strcat(namn, " Holmberg");
-    // // printf("Hej %s\n", namn);
-    // // return 0;
+    PlayerPrint("Stefan ", "Svensson ", "Sweden");
+    PlayerPrint("Anna ", "Andersson ", "USA");
+    PlayerPrint("Kalle ", "Svensson"); // uses default parameter
+    return 0;
 }
